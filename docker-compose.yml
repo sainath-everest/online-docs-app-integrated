@@ -1,0 +1,32 @@
+version: "3"
+services:
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - "27017:27017"
+    #volumes:
+     # - ./usr/local/var/mongodb:/data/db
+  app:
+    restart: always
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./server:/usr/src/app
+    links:
+      - "mongo"
+  client:
+    container_name: client
+    restart: always
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+       - ./client:/usr/src/app
+    links:
+      - "app"
