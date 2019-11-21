@@ -4,18 +4,27 @@ const bodyParser  = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 let config = require('config');
+let retry = require('async-retry');
 
-//set up express app
 const app = express();
 
-//connect to mango db
-mongoose.connect(config.DBHOst);
 mongoose.Promise = global.Promise;
+const dbConncetion = async(bail, number) => {
+    console.log("Trying to connect:", number);
+    await mongoose.connect(config.DBHOst);
+    bail('DB connection successfull');
+}
+
+retry(dbConncetion, {retries: 100, minTimeout:5000}).catch(error=>{
+    console.log(error);
+})
+
+
+ 
 
 app.use(bodyParser.json());
 
 app.use(cors());
-//initialize routes
 app.use('/api',routes);
 
 app.use(function(err,req,res,next){
