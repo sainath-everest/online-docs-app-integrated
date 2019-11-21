@@ -79,7 +79,7 @@ handleClickDoc(doc){
   this.setState({isDoc : true,currentDoc:doc});
 }
 hadnleClickDocSave(doc,data){
-    let url = 'http://app:8080/api/document/'+doc._id
+    let url = 'http://localhost:8080/api/document/'+doc._id
     axios.put(url,{data:data}).then(res => {});
     let parentFolder = this.findDocMetadataById(doc.parentId);
     this.handleClickFolder(parentFolder);
