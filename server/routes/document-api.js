@@ -2,32 +2,12 @@ const express = require('express');
 const documentRouter = express.Router();
 const Document = require('../model/document');
 const documentRepo = require("../repository/document-repository")
+const documentController = require("../controller/document-controller")
 
-//initail  load of documents tree meta data
-documentRouter.get('/', async (req, res, next) => {
-    let docs = await documentRepo.metaData().catch(next);
-    res.send(docs);
-});
-
-documentRouter.get('/document/:id', async (req, res, next) => {
-    let document = await documentRepo.get(req).catch(next);
-    res.send(document);
-});
-documentRouter.post('/document', async (req, res, next) => {
-
-    let document = await documentRepo.save(req).catch(next);
-    res.send(document);
-
-
-});
-documentRouter.put('/document/:id', async (req, res, next) => {
-    let document = await documentRepo.update(req);
-    res.send(document);
-
-});
-documentRouter.delete('/document/:id', async (req, res, next) => {
-    let document = await documentRepo.delete(req);
-    res.send(document);
-});
+documentRouter.get('/',documentController.getMetada);
+documentRouter.get('/document/:id',documentController.getDocument);
+documentRouter.post('/document', documentController.saveDocument);
+documentRouter.put('/document/:id',documentController.updateDocument);
+documentRouter.delete('/document/:id', documentController.deleteDocument);
 
 module.exports = documentRouter;

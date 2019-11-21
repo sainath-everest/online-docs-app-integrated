@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use('/api',routes);
 
-app.use(function(err,req,res,next){
+app.use(function(err,req,res){
     res.send({error : err.message});
 });
 

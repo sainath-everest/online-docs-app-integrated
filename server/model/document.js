@@ -10,23 +10,23 @@ const documentSchema = new Schema(
         type: {
             type: String,
         },
-        data  : {
-            type : String,
+        data: {
+            type: String,
             default: ""
         },
         parentId: {
             type: String,
         },
-        children : {
-            type : [String]
+        children: {
+            type: [String]
         },
         creationDate: {
-             type: Date, 
-             default: Date.now 
-         },
-         lastUpdated: {
-            type: Date, 
-            default: Date.now 
+            type: Date,
+            default: Date.now
+        },
+        lastUpdated: {
+            type: Date,
+            default: Date.now
         }
 
     }

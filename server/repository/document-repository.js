@@ -1,49 +1,31 @@
 const Document = require('../model/document')
 
-const documentRepo = {
-    save: async (req) => {
-        const document = await Document.create(req.body);
-        if(document.parentId){
-            await Document.findByIdAndUpdate(req.body.parentId, { $push: { "children": [document._id] } });
-        }
-        return document;
-    },
-    get: async (req) => {
-        const document = await Document.findById({ _id: req.params.id });
-        return document;
+const save = async (document) => {
+    return await Document.create(document);
+}
+const get = async (documentId) => {
+    return await Document.findById({ _id: documentId });
+}
+const update = async (documentId, updatedDocument) => {
+    return await Document.findByIdAndUpdate({ _id: documentId }, updatedDocument, { new: true });
 
-    },
-    update: async (req) => {
-        const document = await Document.findByIdAndUpdate({ _id: req.params.id }, req.body, { new: true });
-        return document;
-
-    },
-    delete: async (req) => {
-        const document = await Document.findByIdAndRemove({ _id: req.params.id });
-        if(document.parentId){
-            await Document.findByIdAndUpdate(document.parentId, { $pull: { "children": document._id } });
-
-        }
-       
-        let children = document.children;
-        children.forEach(element => {
-            Document.findByIdAndRemove(element).then(() => {
-
-            })
-
-        });
-        return document;
-    },
-    metaData: async () => {
-        const initialData = await Document.find({}, '_id title parentId children type');
-        if(initialData.length == 0){
-            await Document.create({"title":"root","type":"folder","parentId":"",children:[]});
-        }
-        
-        const docs = await Document.find({}, '_id title parentId children type');
-        return docs;
-
-    }
+}
+const remove = async (documentId) => {
+    return await Document.findByIdAndRemove({ _id: documentId });
+}
+const findAllDocuments = async () => {
+    return await Document.find({}, '_id title parentId children type');
+}
+const updateById = async (id, values) => {
+    await Document.findByIdAndUpdate({ _id: id }, values)
 }
 
-module.exports = documentRepo;
+module.exports = {
+    save,
+    get,
+    update,
+    remove,
+    findAllDocuments,
+    updateById
+
+};
