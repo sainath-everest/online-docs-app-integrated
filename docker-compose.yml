@@ -5,8 +5,8 @@ services:
     image: mongo
     ports:
       - "27017:27017"
-    #volumes:
-     # - ./usr/local/var/mongodb:/data/db
+    volumes:
+      - /Users/sainathm/mongodb:/data/db
   app:
     restart: always
     build:
@@ -18,6 +18,8 @@ services:
       - ./server:/usr/src/app
     links:
       - "mongo"
+    environment:
+      WAIT_HOSTS: mongo:27017
   client:
     container_name: client
     restart: always
