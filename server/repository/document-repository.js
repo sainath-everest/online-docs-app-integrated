@@ -13,11 +13,14 @@ const update = async (documentId, updatedDocument) => {
 const remove = async (documentId) => {
     return await Document.findByIdAndRemove({ _id: documentId });
 }
-const findAllDocuments = async () => {
-    return await Document.find({}, '_id title parentId children type');
+const findAllRootDocuments = async () => {
+    return await Document.find({parentId : ""}, '_id title parentId children type');
 }
 const updateById = async (id, values) => {
     await Document.findByIdAndUpdate(id , values)
+}
+const getMetadata = async (documentId)  => {
+    return await Document.findById(documentId, '_id title parentId children type');
 }
 
 module.exports = {
@@ -25,7 +28,8 @@ module.exports = {
     get,
     update,
     remove,
-    findAllDocuments,
-    updateById
+    findAllRootDocuments,
+    updateById,
+    getMetadata
 
 };

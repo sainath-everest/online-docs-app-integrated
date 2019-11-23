@@ -1,6 +1,6 @@
 const documentRepo = require("../repository/document-repository")
 const getMetada = async () => {
-    return await documentRepo.findAllDocuments();
+    return await documentRepo.findAllRootDocuments();
 }
 const getDocumentById = async (documentId) => {
     return await documentRepo.get(documentId);
@@ -33,10 +33,15 @@ const deleteDocument = async (documentId) => {
     return document;
 
 }
+const getDocumentMetadataById = async(documentId) => {
+    return await documentRepo.getMetadata(documentId)
+
+}
 module.exports = {
     getMetada,
     getDocumentById,
     saveDocument,
     updateDocument,
-    deleteDocument
+    deleteDocument,
+    getDocumentMetadataById
 }

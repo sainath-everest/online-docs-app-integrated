@@ -20,11 +20,17 @@ const deleteDocument = async (req, res, next) => {
     const document = await documentService.deleteDocument(req.params.id);
     res.send(document);
 }
+const getDocumentMetadata = async(req, res, next) => {
+    const document = await documentService.getDocumentMetadataById(req.params.id);
+    res.send(document);
+
+}
 
 module.exports = {
     getMetada,
     getDocument,
     saveDocument,
     updateDocument,
-    deleteDocument
+    deleteDocument,
+    getDocumentMetadata
 }

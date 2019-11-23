@@ -6,6 +6,7 @@ const documentController = require("../controller/document-controller")
 
 documentRouter.get('/',documentController.getMetada);
 documentRouter.get('/document/:id',documentController.getDocument);
+documentRouter.get('/document/metadata/:id',documentController.getDocumentMetadata);
 documentRouter.post('/document', documentController.saveDocument);
 documentRouter.put('/document/:id',documentController.updateDocument);
 documentRouter.delete('/document/:id', documentController.deleteDocument);

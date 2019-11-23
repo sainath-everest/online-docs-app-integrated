@@ -10,7 +10,6 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      metaData: [],
       currentLevelDocs : [],
       isDoc : false,
       currentDoc : {},
@@ -21,15 +20,9 @@ class App extends React.Component {
     axios.get('http://localhost:8080/api/')
       .then(res => {
         console.log(res);
-        const metaData = res.data;
-        let rootLevelDocs = [];
-        for (let i = 0; i < metaData.length; i++) {
-          if (metaData[i].parentId == "") {
-            rootLevelDocs.push(metaData[i]);
-          }
-        }
+        let rootLevelDocs = res.data;
+        console.log("rootLevelDocs"+rootLevelDocs);
         this.setState({
-          metaData: metaData,
           currentLevelDocs : rootLevelDocs
         });
 
@@ -37,13 +30,9 @@ class App extends React.Component {
       });
 
   }
-  renderRootLevelDocs(){
-    this.setState({})
-
-  }
     findDocMetadataById = async(docId) => {
       console.log("in findDocMetadataById");
-      let url = 'http://localhost:8080/api/document/'+docId
+      let url = 'http://localhost:8080/api/document/metadata/'+docId
       const {data} = await axios.get(url);
       return data; 
   }
