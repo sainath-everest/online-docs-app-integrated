@@ -6,11 +6,11 @@ const getDocumentById = async (documentId) => {
     return await documentRepo.get(documentId);
 }
 const saveDocument = async (document) => {
-    document = await documentRepo.save(document);
+    let newDocument = await documentRepo.save(document);
     if (document.parentId) {
-        await documentRepo.updateById(document.parentId, { $push: { "children": [documentId] } });
+        await documentRepo.updateById(document.parentId, { $push: { "children": [newDocument._id] } });
     }
-    return document;
+    return newDocument;
 
 }
 const updateDocument = async (documentId, updatedDocument) => {
@@ -19,8 +19,10 @@ const updateDocument = async (documentId, updatedDocument) => {
 
 const deleteDocument = async (documentId) => {
     const document = await documentRepo.remove(documentId);
+    
     if (document.parentId) {
-        await documentRepo.updateById(document.parentId, { $pull: { "children": [documentId] } });
+        console.log("in delete")
+        await documentRepo.updateById(document.parentId, { $pull: {"children": documentId } });
 
     }
     let children = document.children;

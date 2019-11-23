@@ -17,7 +17,7 @@ const findAllDocuments = async () => {
     return await Document.find({}, '_id title parentId children type');
 }
 const updateById = async (id, values) => {
-    await Document.findByIdAndUpdate({ _id: id }, values)
+    await Document.findByIdAndUpdate(id , values)
 }
 
 module.exports = {

@@ -12,20 +12,14 @@ class CurrentDcoument extends React.Component {
         
     }
     componentDidMount(){
-        
         let url = 'http://localhost:8080/api/document/'+this.props.doc._id
         return axios.get(url).then(res => {
             this.setState({docData : res.data.data});
-            
-
-        })
-        
+        })  
     }
   
   render() {
       let docData = "";
-      
-     
     return (
         <div className="App">
         <CKEditor
@@ -44,7 +38,7 @@ class CurrentDcoument extends React.Component {
             } }
         />
         {/* <button onClick = {()=>{this.updateDocumet(this.props.doc,docData)} } >save</button> */}
-        <button onClick = {()=>{this.props.onClick(this.props.doc,docData)} } >save</button>
+        <button onClick = {()=>{this.props.onClick(this.props.doc,docData,this.props.currentLevelDocs)} } >save</button>
     </div>
         )
     

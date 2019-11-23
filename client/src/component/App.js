@@ -11,12 +11,10 @@ class App extends React.Component {
     super(props);
     this.state = {
       metaData: [],
-      root: {},
       currentLevelDocs : [],
       isDoc : false,
       currentDoc : {},
       currentDirectory : {},
-      isInitialLoad : true
     };
   }
   componentDidMount() {
@@ -24,46 +22,39 @@ class App extends React.Component {
       .then(res => {
         console.log(res);
         const metaData = res.data;
-        let root;
+        let rootLevelDocs = [];
         for (let i = 0; i < metaData.length; i++) {
           if (metaData[i].parentId == "") {
-            root = metaData[i];
+            rootLevelDocs.push(metaData[i]);
           }
         }
-        this.state.currentLevelDocs.push(root);
-
         this.setState({
           metaData: metaData,
-          root: root,
-          currentDirectory : root
-         
-
+          currentLevelDocs : rootLevelDocs
         });
 
 
       });
 
   }
-  findDocMetadataById(docId){
-    console.log("in findDocMetadataById");
-    return this.state.metaData.find(
-      (doc,index) => doc._id == docId
-        
-      
-    );
+  renderRootLevelDocs(){
+    this.setState({})
+
   }
-   handleClickFolder(doc){
+    findDocMetadataById = async(docId) => {
+      console.log("in findDocMetadataById");
+      let url = 'http://localhost:8080/api/document/'+docId
+      const {data} = await axios.get(url);
+      return data; 
+  }
+   async handleClickFolder(doc){
     console.log("in handleClick");
     let docs = [];
     if(doc.children.length>0){
-       doc.children.map(
-        (docId, index)=>{
-            let doc =  this.findDocMetadataById(docId)
-            docs.push(doc);
-          }
-          
-    );
-    }
+      for(let i=0;i<doc.children.length;i++) {
+         docs.push(await this.findDocMetadataById(doc.children[i]));
+      }
+     }
     this.setState({
       currentLevelDocs: docs,
       currentDirectory : doc,
@@ -78,34 +69,30 @@ handleClickDoc(doc){
   console.log("in handleClickDoc");
   this.setState({isDoc : true,currentDoc:doc});
 }
-hadnleClickDocSave(doc,data){
+async hadnleClickDocSave(doc,data,currentLevelDocs){
     let url = 'http://localhost:8080/api/document/'+doc._id
-    axios.put(url,{data:data}).then(res => {});
-    let parentFolder = this.findDocMetadataById(doc.parentId);
-    this.handleClickFolder(parentFolder);
+    await axios.put(url,{data:data}).then(res => {});
+
+    if(doc.parentId == ""){
+      this.setState({currentLevelDocs:currentLevelDocs,  isDoc : false});
+    }
+    else{
+      let parentFolder = await this.findDocMetadataById(doc.parentId);
+      this.handleClickFolder(parentFolder);
+
+    }
+   
 
 }
 
-afterCreateNewItem(newDoc,currentDirectory){
-
-  this.state.metaData.push(newDoc);
-  currentDirectory.children.push(newDoc._id);
-  this.handleClickFolder(currentDirectory);
-
-}
-handleDocmenuClick(event,data){
+async handleDocmenuClick(event,data){
   let url = 'http://localhost:8080/api/document/'+data.currentDoc._id
   if(data.option == "delete"){
-    axios.delete(url).then(res =>{
-      axios.get('http://localhost:8080/api/').then(res => {
-         let updateMetaData = res.data;
-         this.state.metaData = updateMetaData;
-         let parentFolder = this.findDocMetadataById(data.currentDoc.parentId);
-          this.handleClickFolder(parentFolder);  
-
-    });
-
-    }); 
+    axios.delete(url).then(res =>{} ); 
+      let docs = this.state.currentLevelDocs;
+      let index = docs.indexOf(data.currentDoc);
+      docs.splice(index, 1);
+      this.setState({currentLevelDocs:docs,  isDoc : false});
 
   }
 
@@ -118,7 +105,9 @@ handleDocmenuClick(event,data){
           {this.state.isDoc ?
             <CurrentDcoument
               doc = {this.state.currentDoc}
-              onClick = {(doc,data) => this.hadnleClickDocSave(doc,data)}
+              currentLevelDocs={this.state.currentLevelDocs}
+              onClick = {(doc,data,currentLevelDocs) => this.hadnleClickDocSave(doc,data,currentLevelDocs)}
+              
             />:
           <CurrentDirectory
             currentLevelDocs={this.state.currentLevelDocs}

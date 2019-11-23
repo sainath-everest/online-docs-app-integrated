@@ -9,10 +9,17 @@ class CurrentDirectory extends React.Component {
     this.state = {
       docType: "folder",
       docName: "",
+      currentLevelDocs:this.props.currentLevelDocs
 
     };
 
   }
+  static getDerivedStateFromProps(nextprops,prevstate){
+    if(prevstate.currentLevelDocs!==nextprops.currentLevelDocs){
+      return ({currentLevelDocs:nextprops.currentLevelDocs})
+    }
+  }
+
 
   handleSelectChange = (event) => {
     this.setState({ docType: event.target.value });
@@ -23,17 +30,20 @@ class CurrentDirectory extends React.Component {
         doc.title == this.state.docName && doc.type == this.state.docType
     )
     if (!docExist) {
+      const parentId =  this.props.currentDirectory._id ?this.props.currentDirectory._id:"";
       let newDoc =
       {
         "title": this.state.docName,
         "type": this.state.docType,
-        "parentId": this.props.currentDirectory._id
+        "parentId": parentId
       }
       axios.post('http://localhost:8080/api/document', newDoc).then((res) => {
-        let docs = this.props.currentLevelDocs;
-        docs.push(res.data);
-        this.props.afterCreateNewItem(res.data,this.props.currentDirectory)
-        //this.setState({})
+        // let docs = this.props.currentLevelDocs;
+        // docs.push(res.data);
+        const currentLevelDocs = this.state.currentLevelDocs;
+        currentLevelDocs.push(res.data);
+        this.setState({currentLevelDocs:currentLevelDocs});
+        // this.props.afterCreateNewItem(res.data,this.props.currentDirectory)
       })
 
 
@@ -66,11 +76,10 @@ class CurrentDirectory extends React.Component {
 
       <div>
         <ul>
-          {this.props.currentLevelDocs.map((doc, index) =>this.renderUserDocument(doc))}
+          {this.state.currentLevelDocs.map((doc, index) =>this.renderUserDocument(doc))}
         </ul>
 
         {
-          !this.props.isInitialLoad ?
             <div>
               <form onSubmit={this.handleSubmit}>
                   <label>
@@ -91,7 +100,7 @@ class CurrentDirectory extends React.Component {
                   <input id = "new-doc-submit" type="submit" value="Create" />
               </form>
 
-            </div> : ""
+            </div>
         }
 
 
