@@ -16,10 +16,16 @@ const documentSchema = new Schema(
         },
         parentId: {
             type: String,
+           
         },
         children: {
             type: [String]
         },
+        ancestors : 
+           [{
+                type: Schema.Types.ObjectId,
+                ref: 'document'
+        }],
         creationDate: {
             type: Date,
             default: Date.now

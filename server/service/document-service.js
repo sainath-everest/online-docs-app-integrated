@@ -1,4 +1,5 @@
 const documentRepo = require("../repository/document-repository")
+const Document = require('../model/document')
 const getMetada = async () => {
     return await documentRepo.findAllRootDocuments();
 }
@@ -9,8 +10,16 @@ const saveDocument = async (document) => {
     let newDocument = await documentRepo.save(document);
     if (document.parentId) {
         await documentRepo.updateById(document.parentId, { $push: { "children": [newDocument._id] } });
+        const data =  await documentRepo.getByPropertyName(document.parentId,"ancestors");
+        let docs = data.ancestors;
+        docs.push(document.parentId);
+        const savedDocument =  await documentRepo.update(newDocument._id, { "ancestors": docs});
+       return savedDocument;
     }
-    return newDocument;
+    else{
+        return newDocument;
+    }
+    
 
 }
 const updateDocument = async (documentId, updatedDocument) => {
@@ -25,11 +34,7 @@ const deleteDocument = async (documentId) => {
         await documentRepo.updateById(document.parentId, { $pull: {"children": documentId } });
 
     }
-    let children = document.children;
-    await children.forEach(async (element) => {
-        await documentRepo.remove(element);
-
-    });
+    documentRepo.removeAllSubDocuments(document._id)
     return document;
 
 }

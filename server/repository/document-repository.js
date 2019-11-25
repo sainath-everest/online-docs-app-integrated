@@ -22,6 +22,17 @@ const updateById = async (id, values) => {
 const getMetadata = async (documentId)  => {
     return await Document.findById(documentId, '_id title parentId children type');
 }
+const getByPropertyName = async (documentId,propertyName) => {
+    return await Document.findById(documentId, propertyName);
+
+}
+const removeAllSubDocuments = (documentId) =>{
+    Document.remove({
+        ancestors: documentId
+      }).exec()
+    
+
+}
 
 module.exports = {
     save,
@@ -30,6 +41,8 @@ module.exports = {
     remove,
     findAllRootDocuments,
     updateById,
-    getMetadata
+    getMetadata,
+    getByPropertyName,
+    removeAllSubDocuments
 
 };
