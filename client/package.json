@@ -14,6 +14,7 @@
     "react-contextmenu": "^2.13.0",
     "react-dom": "^16.11.0",
     "react-medium-editor": "^1.8.1",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
     "react-test-renderer": "^16.12.0",
     "sinon": "^7.5.0"
@@ -38,5 +39,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "history": "^4.10.1"
   }
 }

@@ -15,7 +15,7 @@ const documentSchema = new Schema(
             default: ""
         },
         parentId: {
-            type: String,
+            type: Schema.Types.ObjectId
            
         },
         children: {
