@@ -98,12 +98,6 @@ class CurrentDirectory extends React.Component {
 
       <div>
         <ul>
-          {
-          this.state.currentDoc?
-          this.state.currentDirectory.ancestors.map((doc, index) => this.renderUserDocument(doc)):null
-          }
-        </ul>
-        <ul>
           {this.state.currentLevelDocs.map((doc, index) => this.renderUserDocument(doc))}
         </ul>
 
