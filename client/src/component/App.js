@@ -8,7 +8,7 @@ import { withRouter } from 'react-router-dom';
 import DocumentAction from './document-action';
 import { Redirect } from "react-router-dom";
 
-class App extends React.Component {
+export class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,16 +26,6 @@ class App extends React.Component {
           currentLevelDocs: rootLevelDocs
         });
       });
-  }
-  renderUserDocument(doc) {
-    return (
-
-      <DocumentAction
-        value={doc.title}
-        menuClick={this.props.menuClick}
-        currentDoc={doc}
-      />
-    );
   }
   render() {
     return (

@@ -2,11 +2,12 @@ import React from 'react';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
 import { Link } from "react-router-dom";
 import { withRouter } from 'react-router-dom';
 import { Redirect } from "react-router-dom";
 
-class CurrentDcoument extends React.Component {
+export class CurrentDcoument extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -18,6 +19,7 @@ class CurrentDcoument extends React.Component {
 
     }
     componentDidMount() {
+        
         let url = 'http://localhost:8080/api/document/' + this.props.match.params.id
         return axios.get(url).then(res => {
             console.log("current document: " + res.data.parentId)

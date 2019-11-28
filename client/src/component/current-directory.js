@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { withRouter } from 'react-router-dom';
 import App from './App';
 
-class CurrentDirectory extends React.Component {
+export class CurrentDirectory extends React.Component {
 
   constructor(props) {
     super(props);
@@ -15,8 +15,7 @@ class CurrentDirectory extends React.Component {
       currentLevelDocs: [],
       currentDirectory: {}
 
-    };
-
+    }; 
   }
 
   componentDidMount() {
@@ -47,6 +46,7 @@ class CurrentDirectory extends React.Component {
   handleSelectChange = (event) => {
     this.setState({ docType: event.target.value });
   }
+  
   handleSubmit = (event) => {
     let docExist = this.state.currentLevelDocs.find(
       (doc, index) =>
@@ -66,13 +66,13 @@ class CurrentDirectory extends React.Component {
           "title": this.state.docName,
           "type": this.state.docType,
         }
-      axios.post('http://localhost:8080/api/document', newDoc).then((res) => {
+
+      return axios.post('http://localhost:8080/api/document', newDoc).then((res) => {
         const currentLevelDocs = this.state.currentLevelDocs;
         currentLevelDocs.push(res.data);
         this.setState({ currentLevelDocs: currentLevelDocs });
+        
       })
-
-
     }
     else {
       alert("the item with given name already exist");
@@ -114,7 +114,7 @@ class CurrentDirectory extends React.Component {
                   onChange={this.handleInputChange} />
               </label>
 
-              <select value={this.state.docType} onChange={this.handleSelectChange}>
+              <select id="doc-type" value={this.state.docType} onChange={this.handleSelectChange}>
                 <option value="folder">folder</option>
                 <option value="document">document</option>
               </select>

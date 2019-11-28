@@ -7,16 +7,16 @@ import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 
 
-class DocumentAction extends React.Component {
+ export class DocumentAction extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       isDocDeleted: false
     }
 
   }
   deleteDocummentOrFolder = (event, data) => {
-    console.log("hello")
     let url = 'http://localhost:8080/api/document/' + data.currentDoc._id
     if (data.option == "delete") {
       return axios.delete(url).then(res => {
