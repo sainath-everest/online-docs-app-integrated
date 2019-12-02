@@ -5,30 +5,26 @@ services:
     image: mongo
     ports:
       - "27017:27017"
-    volumes:
-      - /Users/sainathm/mongodb:/data/db
   app:
+    image: sainath2236/online-docs-app-server
     restart: always
-    build:
-      context: ./server
-      dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    volumes:
-      - ./server:/usr/src/app
     links:
       - "mongo"
     environment:
       WAIT_HOSTS: mongo:27017
   client:
-    container_name: client
+    image: sainath2236/online-docs-app-client
     restart: always
-    build:
-      context: ./client
-      dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    volumes:
-       - ./client:/usr/src/app
     links:
       - "app"
+  nginx:
+    image: sainath2236/online-docs-app-nginx
+    ports:
+      - '80:80' 
+    links: 
+      - client
+      - app

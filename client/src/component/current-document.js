@@ -20,14 +20,14 @@ export class CurrentDcoument extends React.Component {
     }
     componentDidMount() {
         
-        let url = 'http://localhost:8080/api/document/' + this.props.match.params.id
+        let url = process.env.REACT_APP_SERVER + '/api/document/' + this.props.match.params.id
         return axios.get(url).then(res => {
             console.log("current document: " + res.data.parentId)
             this.setState({ docData: res.data.data, currentDoc: res.data });
         })
     }
     saveOrUpdateDocument = (currentDoc, data) => {
-            let url = 'http://localhost:8080/api/document/' + currentDoc._id
+            let url = process.env.REACT_APP_SERVER +'/api//document/' + currentDoc._id
             return axios.put(url, { data: data }).then(res => { 
                 this.setState({
                     isSaved:!this.state.isSaved

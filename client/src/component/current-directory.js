@@ -20,7 +20,7 @@ export class CurrentDirectory extends React.Component {
 
   componentDidMount() {
     if (this.props.match.params.id == 'root') {
-      axios.get('http://localhost:8080/api/')
+      axios.get(process.env.REACT_APP_SERVER+'/api')
         .then(res => {
           let rootLevelDocs = res.data;
           this.setState({
@@ -33,7 +33,7 @@ export class CurrentDirectory extends React.Component {
 
     }
     else {
-      let url = 'http://localhost:8080/api/document/metadata/' + this.props.match.params.id
+      let url = process.env.REACT_APP_SERVER + '/api/document/metadata/' + this.props.match.params.id
       axios.get(url).then((res) => {
         this.setState({ currentLevelDocs: res.data.children, currentDirectory: res.data });
 
@@ -67,7 +67,7 @@ export class CurrentDirectory extends React.Component {
           "type": this.state.docType,
         }
 
-      return axios.post('http://localhost:8080/api/document', newDoc).then((res) => {
+      return axios.post((process.env.REACT_APP_SERVER+'/api/document'), newDoc).then((res) => {
         const currentLevelDocs = this.state.currentLevelDocs;
         currentLevelDocs.push(res.data);
         this.setState({ currentLevelDocs: currentLevelDocs });

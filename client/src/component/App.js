@@ -19,7 +19,8 @@ export class App extends React.Component {
     };
   }
   componentDidMount() {
-    axios.get('http://localhost:8080/api/')
+    console.log(process.env.REACT_APP_SERVER);
+    axios.get(process.env.REACT_APP_SERVER+'/api')
       .then(res => {
         let rootLevelDocs = res.data;
         this.setState({

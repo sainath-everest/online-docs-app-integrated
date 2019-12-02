@@ -17,7 +17,7 @@ import { withRouter } from 'react-router-dom';
 
   }
   deleteDocummentOrFolder = (event, data) => {
-    let url = 'http://localhost:8080/api/document/' + data.currentDoc._id
+    let url = process.env.REACT_APP_SERVER + '/api/document/' + data.currentDoc._id
     if (data.option == "delete") {
       return axios.delete(url).then(res => {
         this.setState({
