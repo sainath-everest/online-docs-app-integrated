@@ -1,0 +1,24 @@
+---
+- hosts : all
+  become: yes
+  vars:
+    pip_install_packages:
+      - name: docker
+      - name: docker-compose
+  roles:
+    - darkwizard242.python3
+    - geerlingguy.pip
+    - geerlingguy.docker
+  tasks:
+    - name: Login into Dockerhub
+      docker_login:
+        username: ********
+        password: *******
+    - name: Copy docker-compose file
+      copy:
+        src: ./docker-compose.yml
+        dest: /home/ubuntu/ansible-test/docker-compose.yml
+    - name: Start containers
+      docker_compose:
+        project_src: /home/ubuntu/ansible-test
+  
