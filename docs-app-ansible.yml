@@ -9,6 +9,8 @@
     - darkwizard242.python3
     - geerlingguy.pip
     - geerlingguy.docker
+  environment:
+     REACT_APP_SERVER: http://13.235.113.104
   tasks:
     - name: Login into Dockerhub
       docker_login:

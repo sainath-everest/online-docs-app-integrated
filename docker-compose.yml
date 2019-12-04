@@ -22,7 +22,7 @@ services:
     links:
       - "app"
     environment:
-      REACT_APP_SERVER: http://192.168.0.45
+      REACT_APP_SERVER: ${REACT_APP_SERVER}
   nginx:
     image: sainath2236/online-docs-app-nginx
     ports:
