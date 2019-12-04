@@ -10,7 +10,7 @@
     - geerlingguy.pip
     - geerlingguy.docker
   environment:
-     REACT_APP_SERVER: http://13.235.113.104
+     REACT_APP_SERVER: http://15.206.185.114
   tasks:
     - name: Login into Dockerhub
       docker_login:
@@ -19,8 +19,8 @@
     - name: Copy docker-compose file
       copy:
         src: ./docker-compose.yml
-        dest: /home/ubuntu/ansible-test/docker-compose.yml
+        dest: /home/ubuntu/docker-compose.yml
     - name: Start containers
       docker_compose:
-        project_src: /home/ubuntu/ansible-test
+        project_src: /home/ubuntu
   
