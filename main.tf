@@ -1,7 +1,6 @@
 provider "aws" {
-	region = "ap-south-1"
-	access_key = "*******"
-	secret_key = "*******"
+	 region = "ap-south-1"
+
 }
 resource "aws_key_pair" "my-app" {
   public_key = file("~/.ssh/id_rsa.pub")
@@ -49,6 +48,17 @@ resource "aws_instance" "my-first-terrraform2"{
 	security_groups = [
     aws_security_group.my_app_sg.name
   ]
+
+ provisioner "remote-exec" {
+    inline = ["sudo apt-get update"]
+
+  connection {
+      type        = "ssh"
+      user        = "ubuntu"
+      private_key = "${file("~/.ssh/id_rsa")}"
+      host        = "${self.public_ip}" 
+    }
+  }
   provisioner "local-exec" {
     command = "ansible-playbook -u ubuntu -i '${self.public_ip},'  docs-app-ansible.yml" 
   }
