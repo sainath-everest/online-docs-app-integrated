@@ -1,11 +1,11 @@
 provider "aws" {
 	region = "ap-south-1"
-	access_key = "AKIAVOX67IJ7OVCUVGDP"
-	secret_key = "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"
+	access_key = "*******"
+	secret_key = "*******"
 }
 resource "aws_key_pair" "my-app" {
   public_key = file("~/.ssh/id_rsa.pub")
-  key_name   = "mya-aws-key"
+  key_name   = "my-aws-key"
 }
 resource "aws_security_group" "my_app_sg" {
   name = "my_instance_sg"
@@ -42,16 +42,20 @@ resource "aws_security_group" "my_app_sg" {
 
 }
 
-resource "aws_instance" "my-first-terrraform"{
+resource "aws_instance" "my-first-terrraform2"{
 	ami = "ami-0123b531fc646552f"
 	instance_type = "t2.micro"
 	key_name = aws_key_pair.my-app.key_name
 	security_groups = [
     aws_security_group.my_app_sg.name
   ]
+  provisioner "local-exec" {
+    command = "ansible-playbook -u ubuntu -i '${self.public_ip},'  docs-app-ansible.yml" 
+  }
 
 
 }
 output "my-server-ip-address" {
-  value = aws_instance.my-first-terrraform.public_ip
+  value = aws_instance.my-first-terrraform2.public_ip
 }
+ 
