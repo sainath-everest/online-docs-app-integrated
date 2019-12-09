@@ -1,6 +1,8 @@
 ---
 - hosts : all
   become: yes
+  environment:
+    REACT_APP_SERVER: http://13.233.196.194
   vars:
     pip_install_packages:
       - name: docker
@@ -9,8 +11,6 @@
     - darkwizard242.python3
     - geerlingguy.pip
     - geerlingguy.docker
-  environment:
-     REACT_APP_SERVER: http://13.126.57.11
   tasks:
     - name: Login into Dockerhub
       docker_login:

@@ -49,7 +49,7 @@ resource "aws_instance" "my-first-terrraform2"{
     aws_security_group.my_app_sg.name
   ]
 
- provisioner "remote-exec" {
+/* provisioner "remote-exec" {
     inline = ["sudo apt-get update"]
 
   connection {
@@ -61,10 +61,10 @@ resource "aws_instance" "my-first-terrraform2"{
   }
   provisioner "local-exec" {
     command = "ansible-playbook -u ubuntu -i '${self.public_ip},'  docs-app-ansible.yml" 
-  }
+  } */
 
 
-}
+} 
 output "my-server-ip-address" {
   value = aws_instance.my-first-terrraform2.public_ip
 }
