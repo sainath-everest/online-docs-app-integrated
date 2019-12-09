@@ -68,8 +68,8 @@ it('it should click on folder/doc button', () => {
         wrapper.find("MenuItem").simulate('click',{},{currentDoc: currentDoc, option: "delete" });  
     });
 
-    it('it should handle event after delete button click',() => {
-        wrapper.update();
+    it('it should handle event after delete button click', async () => {
+        await wrapper.update();
         expect(wrapper.instance().state.isDocDeleted).toBe(true);
         expect(wrapper.find(Redirect).props().to).toBe('/folder/5dd3a3e58a8e090011f3a520');
        

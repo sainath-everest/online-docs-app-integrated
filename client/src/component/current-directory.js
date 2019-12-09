@@ -1,9 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 import DocumentAction from './document-action';
-import { Link } from "react-router-dom";
 import { withRouter } from 'react-router-dom';
-import App from './App';
+import * as DocumentService from '../service/document-service'
+
 
 export class CurrentDirectory extends React.Component {
 
@@ -18,26 +18,18 @@ export class CurrentDirectory extends React.Component {
     }; 
   }
 
-  componentDidMount() {
-    if (this.props.match.params.id == 'root') {
-      axios.get(process.env.REACT_APP_SERVER+'/api')
-        .then(res => {
+ async componentDidMount() {
+    if (this.props.match.params.id == 'root') { 
+      const res = await DocumentService.getRootLevelDocs(); 
           let rootLevelDocs = res.data;
           this.setState({
             currentLevelDocs: rootLevelDocs,
             currentDirectory: {}
-
           });
-
-        });
-
     }
     else {
-      let url = process.env.REACT_APP_SERVER + '/api/document/metadata/' + this.props.match.params.id
-      axios.get(url).then((res) => {
-        this.setState({ currentLevelDocs: res.data.children, currentDirectory: res.data });
-
-      })
+      const res = await DocumentService.getDocumentMetadataById(this.props.match.params.id);
+      this.setState({ currentLevelDocs: res.data.children, currentDirectory: res.data });
 
     }
 

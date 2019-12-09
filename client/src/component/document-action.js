@@ -1,10 +1,10 @@
-import React, { Menu } from 'react';
-import 'font-awesome/css/font-awesome.min.css';
-import '../css/document-action.css'
-import { MenuItem, ContextMenuTrigger, ContextMenu } from 'react-contextmenu';
-import { Link, Redirect } from "react-router-dom";
 import axios from 'axios';
-import { withRouter } from 'react-router-dom';
+import 'font-awesome/css/font-awesome.min.css';
+import React from 'react';
+import { ContextMenu, ContextMenuTrigger, MenuItem } from 'react-contextmenu';
+import { Link, Redirect, withRouter } from "react-router-dom";
+import '../css/document-action.css';
+import * as DocumentService from '../service/document-service'
 
 
  export class DocumentAction extends React.Component {
@@ -16,14 +16,12 @@ import { withRouter } from 'react-router-dom';
     }
 
   }
-  deleteDocummentOrFolder = (event, data) => {
-    let url = process.env.REACT_APP_SERVER + '/api/document/' + data.currentDoc._id
+  deleteDocummentOrFolder = async (event, data) => {
     if (data.option == "delete") {
-      return axios.delete(url).then(res => {
+      await  DocumentService.deleteDocummentOrFolder(data);
         this.setState({
           isDocDeleted: !this.state.isDocDeleted
         })
-      });
     }
 
   }

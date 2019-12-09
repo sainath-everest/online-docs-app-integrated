@@ -8,7 +8,7 @@ let config = require('config');
 const app = express();
 
 mongoose.Promise = global.Promise;
-mongoose.connect(config.DBHOst);
+mongoose.connect(config.DBHost);
 app.use(bodyParser.json());
 
 app.use(cors());

@@ -4,6 +4,7 @@ import  React  from 'react'
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { Redirect }  from 'react-router-dom';
+import * as DocumentService from '../service/document-service'
 
 it('it renders without crash', () => {
     shallow(<CurrentDcoument
@@ -21,7 +22,7 @@ describe("update document",() => {
         "parentId": {"_id" :"5dd3a3e58a8e090011f3a520"}
     }
     const mock = new MockAdapter(axios);
-
+    
     mock.onGet('http://localhost:8080/api/document/100').reply(200,currentDoc);
     mock.onPut('http://localhost:8080/api/document/100').reply(200,currentDoc);
     
@@ -35,8 +36,9 @@ describe("update document",() => {
       
            
         })
+        
     it("it should update document", async() => {
-        wrapper.update();
+      await  wrapper.update();
        expect(wrapper.instance().state.isSaved).toBe(true);
        expect(wrapper.find(Redirect).props().to).toBe('/folder/5dd3a3e58a8e090011f3a520');
     })

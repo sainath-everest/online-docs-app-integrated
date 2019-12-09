@@ -1,11 +1,9 @@
-import React from 'react';
-import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import CKEditor from '@ckeditor/ckeditor5-react';
 import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
-import { Link } from "react-router-dom";
-import { withRouter } from 'react-router-dom';
-import { Redirect } from "react-router-dom";
+import React from 'react';
+import { Redirect, withRouter } from 'react-router-dom';
+import * as DocumentService from '../service/document-service'
 
 export class CurrentDcoument extends React.Component {
     constructor(props) {
@@ -18,26 +16,25 @@ export class CurrentDcoument extends React.Component {
         }
 
     }
+
     componentDidMount() {
-        
-        let url = process.env.REACT_APP_SERVER + '/api/document/' + this.props.match.params.id
-        return axios.get(url).then(res => {
-            console.log("current document: " + res.data.parentId)
-            this.setState({ docData: res.data.data, currentDoc: res.data });
-        })
+        this.getCurrentDocumentData();
+
     }
-    saveOrUpdateDocument = (currentDoc, data) => {
-            let url = process.env.REACT_APP_SERVER +'/api//document/' + currentDoc._id
-            return axios.put(url, { data: data }).then(res => { 
+
+   async getCurrentDocumentData() {
+        const res = await DocumentService.getDocumenById(this.props.match.params.id);
+        this.setState({ docData: res.data.data, currentDoc: res.data });
+    }
+    saveOrUpdateDocument = async (currentDoc, data) => {
+       await DocumentService.saveOrUpdateDocument(currentDoc, data);
                 this.setState({
                     isSaved:!this.state.isSaved
                 })
-            });
-
     }
 
     render() {
-        let docData = "";
+        let docData = this.state.docData;
         return (
             <div className="App">
                 <CKEditor
